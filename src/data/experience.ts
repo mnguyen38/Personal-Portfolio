@@ -1,42 +1,44 @@
+import type { Skill } from "./skills";
+
 export interface Experience {
   id: string;
+  role: string;
   company: string;
-  position: string;
   location: string;
-  startDate: string;
-  endDate: string | "Present";
-  description: string[];
-  technologies: string[];
+  // "YYYY.MM" strings, rendered as-is in the timeline.
+  start: string;
+  end: string;
+  tags: Skill[];
+  bullets: string[];
 }
 
-export const experiences: Experience[] = [
+export const experience: Experience[] = [
   {
-    id: "1",
-    company: "Fleischhacker Medizintechnik GmbH Co. KG",
-    position: "Software Development Engineer Intern",
+    id: "fleischhacker",
+    role: "Software Development Engineer Intern",
+    company: "Fleischhacker Medizintechnik",
     location: "Germany",
-    startDate: "2024-01",
-    endDate: "2024-05",
-    description: [
-      "Led a pilot initiative to transition warehouse management systems by integrating RFID barcodes and scanners, resulting in a more accurate inventory count",
-      "Created a prototype for a warehouse digital item navigation system to be integrated with a .NET-based ERP. Designed Android application to function in parallel with the ERP, enabling smart scanning and automatic updates",
-      "Developed algorithms to automate task allocation to optimize warehouse operations, increasing daily output levels by 18%. Wrote an internal tool to provide hourly productivity forecasts; created models and simulated processes using Java",
-      "Reported and fixed bugs in the in-house ERP, added new features based on employee requests, writing macros for Excel workflows, and implemented data constraint logic bug checks",
+    start: "2024.01",
+    end: "2024.05",
+    tags: ["Java", "SQL"],
+    bullets: [
+      "Analysed worker performance data to design Java task-allocation algorithms, increasing daily output by 18%; built a forecasting tool giving management hourly productivity predictions.",
+      "Led a pilot migrating warehouse inventory to RFID tracking, with real-time bidirectional sync between Android devices and a SQL Server backend, projected to cut the semi-annual count from 2 weeks to 1.",
+      "Built internal automation tools, including a VBA financial spreadsheet organiser that replaced manual data transformation.",
+      "Fixed production bugs in the company's proprietary ERP and reviewed and merged teammates' code.",
     ],
-    technologies: ["Java", ".NET", "Android", "VB.NET", "Excel", "RFID"],
   },
   {
-    id: "2",
-    company: "Joint Stock Commercial Bank for Foreign Trade of Vietnam",
-    position: "Cyber-Security Intern",
+    id: "vietcombank",
+    role: "Cyber-Security Intern",
+    company: "Vietcombank",
     location: "Vietnam",
-    startDate: "2023-05",
-    endDate: "2023-07",
-    description: [
-      "Using Burp Suite, tested the security of existing web applications through the lens of an attacker with a team of professional pen-testers. Identified a potential stored XSS vulnerability that could have affected users by creating pop-ups which could steal user's cookies",
-      "Observed and monitored connections to the bank's digital banking application to find malicious addresses that could potentially harm the bank using their locally built monitoring software. Shadowed an engineer in the process of setting prevention techniques, such as re-configuring firewalls",
-      "Identified and reported a Trojan malware which uses the host GPU for mining using sysinternals. Assisted in the process of removing the malware from systems affected, as well as install updates that will prevent future cases of this type of malware",
+    start: "2023.05",
+    end: "2023.07",
+    tags: ["Security"],
+    bullets: [
+      "Penetration-tested customer-facing banking applications with the red team; found a stored XSS vulnerability enabling session hijacking and wrote the remediation report.",
+      "Monitored live traffic to the digital banking platform, flagging malicious IP addresses and collaborating on firewall rule changes to block them.",
     ],
-    technologies: ["Burp Suite", "sysinternals", "Network Security", "Firewalls", "Malware Analysis"],
   },
 ];

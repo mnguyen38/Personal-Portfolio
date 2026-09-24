@@ -1,66 +1,37 @@
-# Minh's Portfolio
+# Minh Nguyen — Portfolio
 
-My portfolio website built with Next.js 16, TypeScript, and Tailwind CSS v4.
-
-## Live Demo
-
-TODO
+Personal site at [minhsonnguyen.dev](https://minhsonnguyen.dev). A single, statically rendered page built with Next.js 16, TypeScript and Tailwind CSS v4.
 
 ## Features
 
-- **Dynamic GitHub Integration** - Automatically fetches and displays repos from GitHub
-- **Real-time Weather** - Live weather display for Boston with animated effects (rain/snow)
-- **Dark/Light Mode** - Theme toggle with system preference detection
-- **Responsive Design** - Mobile-first layout
-- **Smooth Animations** - Framer Motion powered transitions
-- **ISR Caching** - Auto-refreshes GitHub data every hour
+- **Command menu**: press `⌘K` / `Ctrl+K` (or click Search) to jump to sections and projects, switch theme, copy the email address or open links.
+- **Skill filter**: pick a skill to highlight the projects and roles that use it.
+- **Project explorer**: select a project to show its details, metrics and links.
+- **Light and dark themes** that follow the system setting, plus a manual toggle.
+- Accessible by keyboard, respects reduced-motion settings, and works on mobile.
 
-## Tech Stack
-
-- Next.js 16 (App Router)
-- TypeScript
-- Tailwind CSS v4
-- Framer Motion
-- shadcn/ui
-
-## Getting Started
+## Getting started
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
+npm run dev        # http://localhost:3000
+npm run lint
+npm run typecheck
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+## Editing content
 
-## Configuration
+All content lives in `src/data/`:
 
-### GitHub Integration
+| File | Contents |
+| --- | --- |
+| `site.ts` | Name, contact links, intro, status and hero metrics |
+| `projects.ts` | Selected work, shown in list order. The first link is the primary button. |
+| `experience.ts` | Roles and bullets |
+| `education.ts` | Degrees |
+| `skills.ts` | Filter chips and the Toolkit section |
 
-Edit `src/data/github-config.ts` to configure:
+Projects and roles are tagged with skills from `filterSkills`, which is what the skill filter matches on.
 
-```typescript
-export const GITHUB_USERNAME = "mnguyen38";
-
-// Mark repos as featured
-export const featuredRepos: string[] = [
-  "your-repo-name",
-];
-
-// Hide specific repos
-export const excludedRepos: string[] = [
-  "repo-to-hide",
-];
-```
-
-### Personal Info
-
-- **Home page**: `src/app/home-client.tsx`
-- **About page**: `src/app/about/page.tsx`
-- **Experience**: `src/data/experience.ts`
-
-## License
-
-MIT
+To update the résumé, replace `public/minh-nguyen-resume.pdf`.

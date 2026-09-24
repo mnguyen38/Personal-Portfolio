@@ -1,50 +1,55 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { JetBrains_Mono, Schibsted_Grotesk } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+import { site } from "@/data/site";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { WeatherProvider } from "@/contexts/weather-context";
-import { Header } from "@/components/layout/header";
-import { ScrollToTop } from "@/components/scroll-to-top";
-import { AnimatedClouds } from "@/components/background/animated-clouds";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const schibsted = Schibsted_Grotesk({
+  variable: "--font-schibsted",
   subsets: ["latin"],
+  weight: ["400", "500", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
+
+const title = `${site.name} | ${site.role}`;
 
 export const metadata: Metadata = {
-  title: "Minh Nguyen | Computer Science Student & Software Engineer",
-  description: "Computer Science student at Northeastern University with experience in full-stack development, cybersecurity, and warehouse automation. Based in Boston, MA.",
+  metadataBase: new URL(site.url),
+  title,
+  description: site.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: site.url,
+    siteName: site.name,
+    title,
+    description: site.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: site.description,
+  },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e0e" },
+  ],
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-        >
-          <WeatherProvider>
-            <AnimatedClouds />
-            <ScrollToTop />
-            <Header />
-            <main className="min-h-screen relative z-10">
-              {children}
-            </main>
-          </WeatherProvider>
+      <body className={`${schibsted.variable} ${jetbrains.variable}`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
         </ThemeProvider>
       </body>
     </html>
