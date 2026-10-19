@@ -6,12 +6,17 @@ export interface Project {
   kicker: string;
   status: "Ongoing" | "Shipped";
   tags: Skill[];
+  // One-line hook: why it's interesting, not what's on the résumé.
   summary: string;
+  // What I personally did.
+  role: string;
   metrics: { value: string; label: string }[];
-  bullets: string[];
   facts: { label: string; value: string }[];
   // The first link is rendered as the primary action.
   links: { label: string; url: string }[];
+  // Long-form write-up in src/content/projects/<id>.mdx.
+  // "draft" write-ups only appear in local development (`npm run dev`).
+  writeup?: "draft" | "published";
 }
 
 export const projects: Project[] = [
@@ -22,21 +27,18 @@ export const projects: Project[] = [
     status: "Ongoing",
     tags: ["Full-stack", "TypeScript", "SQL", "Finance"],
     summary:
-      "A platform for researching options strategies: backtest them on historical market data, then forward-test them live on a paper trading account.",
+      "Test an options idea on history, then let it trade on paper before trusting it with real money. Two automated strategies run side by side, and the leader's numbers update on this site every trading day.",
+    role: "Built it end to end: data, backtest engine, live paper-trading engine and dashboard.",
     metrics: [],
-    bullets: [
-      "Backtests options strategies on historical data, focused on single-name (idiosyncratic) opportunities rather than macro positioning.",
-      "Runs selected strategies through an automated trading engine on a paper account, with live market data, implied-volatility measurement and an activity log.",
-      "Backed by PostgreSQL, with unit and integration test suites running in CI.",
-    ],
     facts: [
       { label: "Stack", value: "Next.js, TypeScript, PostgreSQL + Drizzle, Vitest" },
-      { label: "Broker", value: "Alpaca API" },
+      { label: "Broker", value: "Alpaca API (paper trading)" },
     ],
     links: [
       { label: "Live app", url: "https://trading-app-kappa-eight.vercel.app" },
       { label: "Code", url: "https://github.com/mnguyen38/trading-app" },
     ],
+    writeup: "draft",
   },
   {
     id: "pancake-overflow",
@@ -45,43 +47,42 @@ export const projects: Project[] = [
     status: "Shipped",
     tags: ["Full-stack", "TypeScript"],
     summary:
-      "A Q&A platform for developers who love cooking, built by a team of three for Northeastern's Fundamentals of Software Engineering course.",
+      "My first time leading an engineering team: a Q&A platform for developers who love cooking, shipped in one semester without letting quality slip.",
+    role: "Team lead of three. Owned code review and the CI/CD pipeline.",
     metrics: [
       { value: "853", label: "automated tests" },
       { value: "97%", label: "statement & line coverage" },
       { value: "23", label: "features shipped" },
-    ],
-    bullets: [
-      "Led the team across Agile sprints and reviewed teammates' pull requests.",
-      "Built a GitHub Actions CI/CD pipeline for automated testing and deployment.",
     ],
     facts: [
       { label: "Stack", value: "TypeScript, React, Node.js, Express, MongoDB" },
       { label: "Team", value: "With Cecily Stevens and Edward Ibarra" },
     ],
     links: [
-      { label: "Live site", url: "https://pancake-overflow.onrender.com" },
       { label: "Code", url: "https://github.com/mnguyen38/fall25-project-fall25-project-group-516" },
     ],
+    writeup: "draft",
   },
   {
     id: "expense-tracker",
-    name: "AI Expense Tracker",
-    kicker: "Python · LLM · Automation",
+    name: "Expense Tracker with AI Integration",
+    kicker: "Python · LLM · Local-first",
     status: "Shipped",
-    tags: ["Python", "AI", "Finance"],
+    tags: ["Python", "AI", "SQL", "Finance"],
     summary:
-      "Turns bank-statement PDFs from any bank into categorised spending, using Claude to extract and categorise each transaction.",
-    metrics: [],
-    bullets: [
-      "Parses statements in any format with AI-powered PDF extraction, then categorises every transaction with Claude.",
-      "Syncs results to a Google Sheets budget, imports transactions from email notifications and sends SMS alerts when spending crosses a threshold.",
+      "A local-first finance app that reads bank statement PDFs from any bank. Known banks go through plain parsers, everything else through Claude, and every statement is reconciled to the cent before you see a number.",
+    role: "Built it end to end: parsers, Claude integration, SQLite ledger, local web app and the monthly report.",
+    metrics: [
+      { value: "266", label: "automated tests" },
+      { value: "85%", label: "line coverage" },
+      { value: "19/19", label: "transactions read from a bank it had never seen" },
     ],
     facts: [
-      { label: "Stack", value: "Python, Anthropic API, Google Sheets API" },
-      { label: "Use", value: "Personal budgeting and FIRE tracking" },
+      { label: "Stack", value: "Python, Claude API (structured outputs), pdfplumber, SQLite" },
+      { label: "Runs", value: "On your machine: CLI, local web app and a monthly report" },
     ],
     links: [{ label: "Code", url: "https://github.com/mnguyen38/Expense-Tracker" }],
+    writeup: "draft",
   },
   {
     id: "document-redaction",
@@ -89,17 +90,16 @@ export const projects: Project[] = [
     kicker: "Office add-in · Privacy",
     status: "Shipped",
     tags: ["TypeScript", "Security"],
-    summary: "A Microsoft Word add-in that detects sensitive information in a document and redacts it.",
+    summary:
+      "Black out sensitive information before a Word document leaves your hands. The tricky part is telling a person's name apart from an ordinary capitalised phrase.",
+    role: "Built the detectors and the add-in's React interface.",
     metrics: [{ value: "13", label: "sensitive-data types detected" }],
-    bullets: [
-      "Detects emails, phone numbers, SSNs, card numbers, addresses, medical record numbers, names and more.",
-      "Lets users choose which types to redact, handles headers, titles and tables, and stamps a CONFIDENTIAL header.",
-    ],
     facts: [
       { label: "Stack", value: "React, TypeScript, Vite, Office.js" },
       { label: "Runs in", value: "Word desktop and Word on the web" },
     ],
     links: [{ label: "Code", url: "https://github.com/mnguyen38/document-redaction-addin" }],
+    writeup: "draft",
   },
   {
     id: "wifi-sensing",
@@ -108,16 +108,14 @@ export const projects: Project[] = [
     status: "Ongoing",
     tags: ["Linux", "Security"],
     summary:
-      "Research into how much consumer WiFi signals reveal about home occupancy, and a software countermeasure against that inference.",
+      "Can your router tell when you're home? I'm measuring how much consumer WiFi signals reveal about occupancy, then building a countermeasure against it.",
+    role: "Research project: data collection with custom router firmware on Linux, signal analysis, and a countermeasure in progress.",
     metrics: [],
-    bullets: [
-      "Extracting WiFi channel state information from a consumer router using Nexmon CSI firmware on Linux.",
-      "Analysing noisy signal data for occupancy patterns across walls, floors, distance and signal strength.",
-    ],
     facts: [
       { label: "Tools", value: "Nexmon CSI, Linux" },
-      { label: "Goal", value: "Occupancy-inference countermeasure" },
+      { label: "Status", value: "Collecting data; no results yet" },
     ],
     links: [],
+    writeup: "draft",
   },
 ];

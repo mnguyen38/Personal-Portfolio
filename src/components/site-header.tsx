@@ -5,11 +5,11 @@ import { site } from "@/data/site";
 const navItems = [
   { href: "#work", label: "Work" },
   { href: "#experience", label: "Experience" },
-  { href: "#education", label: "Education" },
+  { href: "#principles", label: "How I work" },
   { href: "#contact", label: "Contact" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ writeupIds }: { writeupIds: string[] }) {
   return (
     <header className="flex items-center justify-between gap-6 border-b border-foreground py-6">
       <a href="#top" className="text-[15px] font-extrabold tracking-[0.08em] uppercase">
@@ -25,7 +25,7 @@ export function SiteHeader() {
             </li>
           ))}
         </ul>
-        <CommandMenu />
+        <CommandMenu writeupIds={writeupIds} />
         <ThemeToggle />
         <a
           href={site.resume}

@@ -11,17 +11,18 @@ export const education: Education[] = [
   {
     school: "Imperial College London",
     degree: "MSc Artificial Intelligence Applications and Innovation",
-    when: "Expected 2027",
+    when: "Until Oct 2027",
     city: "London",
-    detail: "Modules: Mathematics for Machine Learning, Machine Learning, Deep Learning",
+    detail:
+      "Going deeper on the maths behind modern AI, from optimisation and probability to deep learning, so I can build AI systems that hold up on messy real-world data, not just in demos.",
     current: true,
   },
   {
     school: "Northeastern University",
     degree: "BS Computer Science, Economics minor",
-    when: "Graduated May 2026",
+    when: "May 2026",
     city: "Boston",
-    detail: "GPA 3.48 · Dean's List",
+    detail: "Dean's List. Where I led my first engineering team, on PancakeOverflow.",
     current: false,
   },
 ];

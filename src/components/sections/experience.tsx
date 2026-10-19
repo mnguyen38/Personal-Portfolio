@@ -5,7 +5,8 @@ import { ChevronDownIcon } from "@/components/icons";
 import { matchesSkill, usePortfolio } from "@/components/portfolio-state";
 import { Section } from "@/components/section-heading";
 import { experience } from "@/data/experience";
-import { cn } from "@/lib/utils";
+import { site } from "@/data/site";
+import { cn, revealDelay } from "@/lib/utils";
 
 export function Experience() {
   const { skill } = usePortfolio();
@@ -14,7 +15,7 @@ export function Experience() {
   return (
     <Section id="experience">
       <ul className="border-t border-rule">
-        {experience.map((job) => {
+        {experience.map((job, index) => {
           const open = openId === job.id;
           const panelId = `experience-${job.id}`;
           return (
@@ -25,6 +26,8 @@ export function Experience() {
                 !matchesSkill(job.tags, skill) && "opacity-25",
               )}
             >
+              {/* Reveal on an inner wrapper: the li's className changes with the filter. */}
+              <div data-reveal style={revealDelay(index)}>
               <button
                 type="button"
                 aria-expanded={open}
@@ -61,12 +64,21 @@ export function Experience() {
                 )}
               >
                 <div className="overflow-hidden">
-                  <ul className="flex list-disc flex-col gap-3 pb-8 pl-[18px] text-[17px] leading-relaxed lg:ml-[calc(25%+0.375rem)] lg:w-2/3">
-                    {job.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
+                  <div className="flex flex-col gap-4 pb-8 text-[17px] leading-relaxed lg:ml-[calc(25%+0.375rem)] lg:w-2/3">
+                    {job.story.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
                     ))}
-                  </ul>
+                    <a
+                      href={site.resume}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="label self-start underline underline-offset-4 hover:text-accent"
+                    >
+                      Full details in résumé ↓
+                    </a>
+                  </div>
                 </div>
+              </div>
               </div>
             </li>
           );

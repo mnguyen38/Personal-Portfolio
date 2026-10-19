@@ -14,6 +14,11 @@ export function scrollToSection(id: string) {
   history.replaceState(null, "", `#${id}`)
 }
 
+// Inline style that staggers [data-reveal] siblings (see ScrollReveal).
+export function revealDelay(index: number, step = 80): React.CSSProperties {
+  return { "--reveal-delay": `${index * step}ms` } as React.CSSProperties
+}
+
 export async function copyText(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text)

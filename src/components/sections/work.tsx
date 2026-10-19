@@ -2,16 +2,19 @@
 
 import { useRef } from "react";
 import { matchesSkill, usePortfolio } from "@/components/portfolio-state";
+import { ProjectReader, type ReaderWriteup } from "@/components/project-reader";
 import { Section } from "@/components/section-heading";
 import { projects } from "@/data/projects";
-import { cn } from "@/lib/utils";
+import { cn, revealDelay } from "@/lib/utils";
+import { writeupHref } from "@/lib/writeup-link";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function Work() {
+export function Work({ writeups }: { writeups: ReaderWriteup[] }) {
   const { skill, projectIndex, setProjectIndex } = usePortfolio();
   const panelRef = useRef<HTMLElement>(null);
   const project = projects[projectIndex];
+  const hasWriteup = writeups.some((writeup) => writeup.id === project.id);
 
   function select(index: number) {
     setProjectIndex(index);
@@ -28,7 +31,7 @@ export function Work() {
           {projects.map((item, index) => {
             const selected = index === projectIndex;
             return (
-              <li key={item.id}>
+              <li key={item.id} data-reveal style={revealDelay(index)}>
                 <button
                   type="button"
                   aria-pressed={selected}
@@ -66,8 +69,12 @@ export function Work() {
           ref={panelRef}
           id="project-panel"
           aria-live="polite"
-          className="flex scroll-mt-6 lg:min-h-[560px] flex-col gap-5.5 bg-card p-7 sm:p-10 lg:col-span-6 lg:col-start-7"
+          data-reveal
+          style={revealDelay(2)}
+          className="flex scroll-mt-6 flex-col bg-card p-7 sm:p-10 lg:col-span-6 lg:col-start-7 lg:min-h-[560px]"
         >
+          {/* Keyed so switching projects replays the crossfade. */}
+          <div key={project.id} className="panel-in flex grow flex-col gap-5.5">
           <span className="label">
             Project {pad(projectIndex + 1)} / {pad(projects.length)} · {project.status}
           </span>
@@ -85,13 +92,11 @@ export function Work() {
             </dl>
           )}
 
-          <ul className="flex list-disc flex-col gap-2.5 pl-[18px] text-base leading-[1.55]">
-            {project.bullets.map((bullet) => (
-              <li key={bullet}>{bullet}</li>
-            ))}
-          </ul>
-
           <dl className="grid grid-cols-[110px_minmax(0,1fr)] gap-x-4 gap-y-2.5 text-[15px]">
+            <div className="contents">
+              <dt className="label pt-[3px]">My role</dt>
+              <dd>{project.role}</dd>
+            </div>
             {project.facts.map((fact) => (
               <div key={fact.label} className="contents">
                 <dt className="label pt-[3px]">{fact.label}</dt>
@@ -101,27 +106,34 @@ export function Work() {
           </dl>
 
           <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
-            {project.links.length > 0 ? (
-              project.links.map((link, index) => (
-                <a
-                  key={link.url}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "inline-flex h-11 items-center border border-foreground px-[18px] text-[15px] font-bold transition-transform hover:-translate-y-0.5",
-                    index === 0 && "bg-foreground text-background",
-                  )}
-                >
-                  {link.label} ↗
-                </a>
-              ))
-            ) : (
-              <span className="label">Write-up in progress</span>
+            {hasWriteup && (
+              <a
+                href={writeupHref(project.id)}
+                className="inline-flex h-11 items-center border border-foreground bg-foreground px-[18px] text-[15px] font-bold text-background transition-transform hover:-translate-y-0.5"
+              >
+                Read the write-up →
+              </a>
             )}
+            {project.links.map((link, index) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "inline-flex h-11 items-center border border-foreground px-[18px] text-[15px] font-bold transition-transform hover:-translate-y-0.5",
+                  index === 0 && !hasWriteup && "bg-foreground text-background",
+                )}
+              >
+                {link.label} ↗
+              </a>
+            ))}
+            {!hasWriteup && project.links.length === 0 && <span className="label">Write-up in progress</span>}
+          </div>
           </div>
         </article>
       </div>
+      <ProjectReader writeups={writeups} />
     </Section>
   );
 }

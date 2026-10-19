@@ -24,8 +24,9 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-heading`} className="flex flex-col gap-9 border-t-2 border-foreground pt-7 pb-20">
-      <div id={`${id}-heading`}>
+    <section id={id} aria-labelledby={`${id}-heading`} className="flex flex-col gap-9 pb-20">
+      <div className="-mb-9 h-0.5 bg-foreground" data-reveal="rule" aria-hidden />
+      <div id={`${id}-heading`} className="pt-7" data-reveal>
         <SectionHeading id={id} aside={aside} />
       </div>
       {children}

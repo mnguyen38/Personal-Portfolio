@@ -1,12 +1,19 @@
 import { PortfolioProvider } from "@/components/portfolio-state";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
 import { SkillFilter } from "@/components/sections/skill-filter";
-import { Contact, Education, SiteFooter, Toolkit } from "@/components/sections/static-sections";
+import { Contact, Education, Principles, SiteFooter } from "@/components/sections/static-sections";
 import { Work } from "@/components/sections/work";
+import { getWriteups } from "@/content/projects";
+import { writeupHref } from "@/lib/writeup-link";
 
 export default function HomePage() {
+  const writeups = getWriteups();
+  const writeupIds = writeups.map((writeup) => writeup.id);
+  const tradingHref = writeupIds.includes("options-backtester") ? writeupHref("options-backtester") : "#work";
+
   return (
     <PortfolioProvider>
       <div id="top" className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 sm:px-8 lg:px-16">
@@ -16,18 +23,19 @@ export default function HomePage() {
         >
           Skip to content
         </a>
-        <SiteHeader />
+        <SiteHeader writeupIds={writeupIds} />
         <main id="main">
-          <Hero />
+          <Hero tradingHref={tradingHref} />
           <SkillFilter />
-          <Work />
+          <Work writeups={writeups} />
           <Experience />
+          <Principles />
           <Education />
-          <Toolkit />
           <Contact />
         </main>
         <SiteFooter />
       </div>
+      <ScrollReveal />
     </PortfolioProvider>
   );
 }

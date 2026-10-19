@@ -13,7 +13,12 @@ export function SkillFilter() {
     : 0;
 
   return (
-    <div role="group" aria-labelledby="skill-filter-label" className="flex flex-wrap items-center gap-x-5 gap-y-3 pb-10">
+    <div
+      role="group"
+      aria-labelledby="skill-filter-label"
+      className="flex flex-wrap items-center gap-x-5 gap-y-3 pb-10"
+      data-reveal
+    >
       <span id="skill-filter-label" className="label">
         Filter by skill
       </span>

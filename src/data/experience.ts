@@ -9,7 +9,8 @@ export interface Experience {
   start: string;
   end: string;
   tags: Skill[];
-  bullets: string[];
+  // The story behind the role; the résumé has the bullet points.
+  story: string[];
 }
 
 export const experience: Experience[] = [
@@ -21,11 +22,10 @@ export const experience: Experience[] = [
     start: "2024.01",
     end: "2024.05",
     tags: ["Java", "SQL"],
-    bullets: [
-      "Analysed worker performance data to design Java task-allocation algorithms, increasing daily output by 18%; built a forecasting tool giving management hourly productivity predictions.",
-      "Led a pilot migrating warehouse inventory to RFID tracking, with real-time bidirectional sync between Android devices and a SQL Server backend, projected to cut the semi-annual count from 2 weeks to 1.",
-      "Built internal automation tools, including a VBA financial spreadsheet organiser that replaced manual data transformation.",
-      "Fixed production bugs in the company's proprietary ERP and reviewed and merged teammates' code.",
+    story: [
+      "I joined a medical-technology company whose warehouse still assigned work by hand, and whose inventory count took two weeks, twice a year.",
+      "Over five months I turned worker performance data into a task-allocation algorithm that lifted daily output by 18%, and led a pilot moving inventory to RFID, with Android scanners syncing to the ERP's SQL Server backend in real time. It's projected to halve that count.",
+      "Everything I built went straight into daily use on the warehouse floor.",
     ],
   },
   {
@@ -36,9 +36,9 @@ export const experience: Experience[] = [
     start: "2023.05",
     end: "2023.07",
     tags: ["Security"],
-    bullets: [
-      "Penetration-tested customer-facing banking applications with the red team; found a stored XSS vulnerability enabling session hijacking and wrote the remediation report.",
-      "Monitored live traffic to the digital banking platform, flagging malicious IP addresses and collaborating on firewall rule changes to block them.",
+    story: [
+      "Three months on the other side of the fence: working with the red team to attack the customer-facing apps of one of Vietnam's largest banks.",
+      "I found a stored XSS vulnerability that could hijack a customer's session and wrote the report on how to fix it, and I watched live banking traffic for malicious addresses to block.",
     ],
   },
 ];

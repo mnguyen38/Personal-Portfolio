@@ -72,6 +72,198 @@
   }
 }
 
+/*
+ * Scroll motion. `reveal-ready` is added to <html> by an inline script, so without JS
+ * everything simply renders in place. ScrollReveal toggles `is-revealed` as elements enter
+ * and leave, so reveals replay whichever way you scroll.
+ */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hidden state resets instantly: it only applies once the element is off screen. */
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0);
+  }
+
+  /* Coming back into view from above (scrolling up), content drops in rather than rising. */
+  .reveal-ready [data-reveal][data-reveal-from="above"] {
+    transform: translate3d(0, -2rem, 0);
+  }
+
+  /* Section rules draw in from the left instead of moving. */
+  .reveal-ready [data-reveal="rule"],
+  .reveal-ready [data-reveal="rule"][data-reveal-from="above"] {
+    opacity: 1;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .reveal-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.9s var(--ease-out-expo),
+      transform 0.9s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-ready [data-reveal="rule"].is-revealed {
+    transition: transform 1.2s var(--ease-out-expo);
+  }
+
+  /* Hero name: each line eases up out of a soft blur on load. */
+  .reveal-ready .hero-line {
+    animation: hero-rise 1.2s var(--ease-out-expo) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* …then shrinks and fades as the page scrolls away (where scroll timelines exist). */
+  @supports (animation-timeline: scroll()) {
+    .hero-name {
+      transform-origin: left bottom;
+      animation: hero-exit linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
+    }
+  }
+
+  .panel-in {
+    animation: panel-in 0.5s var(--ease-out-expo) both;
+  }
+
+  /* Write-up reader slides in from the right over a fading backdrop. */
+  .reader-sheet {
+    animation: reader-in 0.55s var(--ease-out-expo) both;
+  }
+
+  .reader-overlay {
+    animation: fade-in 0.4s ease both;
+  }
+}
+
+@keyframes reader-in {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Theme switching (see lib/theme-transition.ts). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The hero dot: a soft ring pulses twice after load to hint that it's clickable. */
+.hero-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Lift the name (and its links) above the backdrop while the phone constellation is open. */
+.dot-open .hero-name {
+  position: relative;
+  z-index: 40;
+}
+
+.dot-backdrop {
+  animation: fade-in 0.35s ease both;
+}
+
+/* Constellation orbs drift gently once they've landed. */
+@media (prefers-reduced-motion: no-preference) {
+  .orb-drift {
+    animation: orb-drift var(--drift, 6s) ease-in-out infinite;
+  }
+}
+
+@keyframes orb-drift {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: 3px -4px;
+  }
+  50% {
+    translate: -2px -1px;
+  }
+  75% {
+    translate: -4px 3px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready .hero-dot::after {
+    animation: dot-hint 1.6s ease-out 2.4s 2;
+  }
+}
+
+@keyframes dot-hint {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+.theme-fade *,
+.theme-fade *::before,
+.theme-fade *::after {
+  transition:
+    background-color 0.5s ease,
+    border-color 0.5s ease,
+    color 0.5s ease,
+    fill 0.5s ease,
+    stroke 0.5s ease,
+    text-decoration-color 0.5s ease !important;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 35%, 0);
+    filter: blur(12px);
+  }
+}
+
+@keyframes hero-exit {
+  to {
+    opacity: 0.15;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+}
+
 @utility label {
   @apply font-mono text-xs uppercase text-muted;
 }

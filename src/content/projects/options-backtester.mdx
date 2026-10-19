@@ -1,0 +1,24 @@
+## Why I built it
+
+[Your origin story in 2–3 sentences: what got you into options, and why you wanted your own tooling instead of an off-the-shelf platform.]
+
+Most tools I found were built around macro bets on the index. I was more interested in **single-name setups**, where one company's news can move its options independently of the market, and I didn't want to trust any strategy until I'd tested it myself.
+
+## How it works
+
+1. **Backtest.** A strategy is replayed against historical market data first. [What data, what time range, how fills and costs are modelled.]
+2. **Paper trade.** Strategies that pass graduate to an automated engine that trades through Alpaca's paper account, measuring implied volatility from live data and logging every decision to an activity log.
+3. **Compete.** Two strategies, one single-name ("micro") and one macro, run side by side. A daily snapshot of each one's equity feeds the Sharpe ratio and return shown on this site.
+4. **Watch.** A Next.js dashboard backed by PostgreSQL shows positions and sends push notifications to my phone.
+
+<Figure placeholder="Architecture: data → backtest engine → paper-trading engine → Postgres → dashboard" caption="How the pieces fit together." />
+
+## The hard part
+
+[The problem that took longest to get right. Your commits suggest implied-volatility measurement and "is the market open?" handling: what broke, and how you fixed it?]
+
+<Figure placeholder="Backtest vs paper-trading equity curve for the leading strategy" caption="[What the gap between backtest and live results taught you.]" />
+
+## What I'd do differently
+
+[e.g. a proper market-holiday calendar; walk-forward testing to guard against overfitting; comparing backtest and paper results once there's enough history.]

@@ -1,0 +1,56 @@
+## Why I built it
+
+I track my own spending towards FIRE (financial independence, retire early). Every bank formats its statements differently, so the parsers I wrote by hand kept breaking whenever a layout changed. [Anything else that pushed you to build it, e.g. not wanting to hand a budgeting app your bank login?]
+
+So I built a local-first tracker: drop in any statement PDF and get a categorised ledger and monthly report, stored on your own machine, with Claude stepping in only where plain code can't.
+
+<Figure
+  src="/writeups/expense-tracker-dashboard.png"
+  alt="The monthly report: a headline saying August kept you $3,360.96 richer, a reconciled statement receipt with a stamp, and 100 coins showing where each dollar of income went"
+  caption="The monthly report, designed like a printed ledger. Synthetic demo data."
+/>
+
+## How it works
+
+1. **Import.** `expense-tracker import statement.pdf` reads the PDF with pdfplumber. Banks I've written a parser for use deterministic regex parsing; anything else falls back to Claude. Parsers are plugins, discovered automatically.
+2. **Categorise.** Claude sorts each transaction into one of 24 categories. When I correct one, it becomes a merchant rule, so known merchants never cost another API call.
+3. **Store.** Everything lands in a local SQLite ledger with history across months. Re-importing the same PDF does nothing.
+4. **Review.** `expense-tracker serve` opens a local web app: drag in a PDF, fix categories inline, and read each month as a report: where every $100 went, a spending diary, and a ledger where one click re-files a transaction and teaches a rule. It's bound to localhost with CSRF and DNS-rebinding protection. Google Sheets sync and Gmail alert import are optional extras.
+
+## The hard part: trusting an LLM with money
+
+A tool that reads bank statements is worse than useless if it's quietly wrong. Four things make it trustworthy:
+
+- **Structured outputs.** Claude replies against a JSON schema, so every response parses, and categories are an enum, so the model can't invent one.
+- **Every statement is reconciled.** Opening balance plus every transaction must equal the closing balance, to the cent. If it doesn't, the import is flagged instead of saved as silently wrong numbers. My own credit card (91 transactions) and checking (8 transactions) statements both reconcile exactly.
+- **Nothing is silently dropped.** An earlier version trimmed long statements to fit the model's context and lost transactions in the middle. Now the full statement is sent, and a truncated or refused response is an error.
+- **Code first, AI second.** Known banks never touch the LLM at all.
+
+To test the fallback, I ran it on a statement from a bank it had never seen, with no parser written for it. In about 10 seconds it extracted all 19 transactions, recognised a $400 transfer to savings as internal rather than spending, reconciled the balances and categorised every expense.
+
+<Figure
+  src="/writeups/expense-tracker-statement.png"
+  alt="Synthetic bank statement from the fictional Northwind Community Bank with 19 transactions"
+  caption="The unseen-bank test: a synthetic statement from a fictional bank. No parser exists for it, so Claude does the reading."
+/>
+
+## Designing the report
+
+Dashboards of cards and bar charts all look the same, so the monthly view reads like a printed report instead:
+
+- **One headline sentence**, like "August kept you $3,360.96 richer", with a line of real context underneath, such as "your best month since May".
+- **Every $100 that came in**, drawn as 100 coins coloured by where each dollar went.
+- **A diary** where each day's dot grows with that day's spending.
+- **The statement check, printed as a receipt**: opening balance, deposits, payments, and the difference. The "Reconciled" stamp only appears when the numbers really match; otherwise it says CHECK NEEDED and shows the gap.
+
+The notes in the margin are computed, not written, and a note only appears when a change is big enough to matter, so a $3 swing in a small category never gets a headline.
+
+Anyone can try it without an API key: `expense-tracker demo` loads six months of synthetic data.
+
+## Engineering
+
+266 tests with 85% line coverage, including end-to-end tests that render real PDFs through the parsers and CLI without touching the network. CI runs ruff and the full suite on Python 3.11 to 3.13. Writing those tests caught a real bug: merchant names were being lost from Gmail alerts whose last line was "Where:".
+
+## What I'd do next
+
+[Pick yours, e.g. more bank parsers, splitting very long statements into chunks, or a hosted version.]

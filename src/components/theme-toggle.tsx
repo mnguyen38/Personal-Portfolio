@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "@/components/icons";
+import { switchTheme } from "@/lib/theme-transition";
 
 // Both icons render on the server; CSS picks one, so there's no hydration flash.
 export function ThemeToggle() {
@@ -10,7 +11,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      onClick={() => switchTheme(resolvedTheme === "dark" ? "light" : "dark", setTheme)}
       aria-label="Toggle dark mode"
       className="flex size-11 items-center justify-center border border-rule transition-colors hover:border-foreground"
     >

@@ -1,0 +1,19 @@
+## Why I built it
+
+[Context: a task, an interview project, or a personal itch? Who is it for?]
+
+## How it works
+
+The add-in runs inside Microsoft Word, on desktop and on the web. It reads the document's body, headers and tables through Office.js, and runs a detector for each of **13 kinds of sensitive data**: emails, phone numbers, social security numbers, card numbers, dates, street addresses, medical record numbers, account numbers, employee IDs, order numbers, licence numbers, insurance numbers and names.
+
+You choose which types to redact from a checkbox panel. Matches are replaced with solid block characters, and a "CONFIDENTIAL DOCUMENT" header is added.
+
+<Figure placeholder="Before-and-after screenshot of a document in Word, with the checkbox panel open" caption="Redacting a sample document." />
+
+## The hard part
+
+**Names.** Most sensitive data follows a pattern, but names don't. Treat every capitalised pair of words as a name and you redact half the document, including headings and business phrases. [How does your business-phrase exclusion work, and what cases does it still get wrong?]
+
+## What I'd do next
+
+[e.g. an ML-based entity recogniser, a review step before redacting, true removal instead of visual blocks.]

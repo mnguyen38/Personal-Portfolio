@@ -7,16 +7,18 @@ import { SearchIcon } from "@/components/icons";
 import { usePortfolio } from "@/components/portfolio-state";
 import { projects } from "@/data/projects";
 import { sections, site } from "@/data/site";
+import { switchTheme } from "@/lib/theme-transition";
 import { cn, copyText, scrollToSection } from "@/lib/utils";
+import { openWriteup } from "@/lib/writeup-link";
 
 interface Command {
   id: string;
   label: string;
-  group: "Section" | "Project" | "Action" | "Link";
+  group: "Section" | "Project" | "Write-up" | "Action" | "Link";
   run: () => void;
 }
 
-export function CommandMenu() {
+export function CommandMenu({ writeupIds }: { writeupIds: string[] }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -61,18 +63,35 @@ export function CommandMenu() {
           goTo("work")();
         },
       })),
+      ...projects
+        .filter((project) => writeupIds.includes(project.id))
+        .map((project) => ({
+          id: `writeup-${project.id}`,
+          label: `Read: ${project.name}`,
+          group: "Write-up" as const,
+          run: () => {
+            skipFocusRestore.current = true;
+            setProjectIndex(projects.indexOf(project));
+            // Deferred so this menu has fully closed before the reader opens.
+            window.setTimeout(() => openWriteup(project.id), 0);
+          },
+        })),
       {
         id: "action-theme",
         label: resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode",
         group: "Action",
-        run: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
+        // Deferred so the menu has closed before the page crossfades.
+        run: () => {
+          const next = resolvedTheme === "dark" ? "light" : "dark";
+          window.setTimeout(() => switchTheme(next, setTheme), 0);
+        },
       },
       { id: "action-email", label: "Copy email address", group: "Action", run: () => void copyText(site.email) },
       { id: "action-resume", label: "Download résumé", group: "Action", run: openLink(site.resume) },
       { id: "link-linkedin", label: "LinkedIn", group: "Link", run: openLink(site.linkedin) },
       { id: "link-github", label: "GitHub", group: "Link", run: openLink(site.github) },
     ];
-  }, [resolvedTheme, setTheme, setProjectIndex]);
+  }, [resolvedTheme, setTheme, setProjectIndex, writeupIds]);
 
   const results = useMemo(() => {
     const needle = query.trim().toLowerCase();
