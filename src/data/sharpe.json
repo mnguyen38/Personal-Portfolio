@@ -1,11 +1,11 @@
 {
-  "asOf": "2026-11-12",
-  "computedAt": "2026-11-13T02:49:16.109Z",
-  "sharpe": 1.88,
+  "asOf": "2026-11-13",
+  "computedAt": "2026-11-14T02:37:00.486Z",
+  "sharpe": 1.7,
   "since": "2026-08-12",
   "trader": {
     "name": "Trader 1",
     "type": "micro"
   },
-  "tradingDays": 67
+  "tradingDays": 68
 }
