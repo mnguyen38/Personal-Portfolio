@@ -1,30 +1,30 @@
 {
-  "asOf": "2026-11-16",
-  "computedAt": "2026-11-17T04:42:26.561Z",
-  "lastDayReturnPct": -4.64,
+  "asOf": "2026-11-17",
+  "computedAt": "2026-11-18T03:47:52.612Z",
+  "lastDayReturnPct": -2.08,
   "since": "2026-08-12",
-  "totalReturnPct": 10.7,
+  "totalReturnPct": 8.4,
   "trader": {
     "name": "Trader 1",
     "type": "micro"
   },
   "traders": [
     {
-      "lastDayReturnPct": -4.64,
+      "lastDayReturnPct": -2.08,
       "name": "Trader 1",
       "since": "2026-08-12",
-      "totalReturnPct": 10.7,
-      "tradingDays": 69,
+      "totalReturnPct": 8.4,
+      "tradingDays": 70,
       "type": "micro"
     },
     {
-      "lastDayReturnPct": -0.72,
+      "lastDayReturnPct": -0.75,
       "name": "Trader 2",
       "since": "2026-08-12",
-      "totalReturnPct": 2.03,
-      "tradingDays": 69,
+      "totalReturnPct": 1.27,
+      "tradingDays": 70,
       "type": "macro"
     }
   ],
-  "tradingDays": 69
+  "tradingDays": 70
 }
